@@ -1,3 +1,4 @@
+// #region call, apply & bind
 const emp1 = {
   firstName: 'sai',
   lastName: 'gandholi',
@@ -62,3 +63,83 @@ Function.prototype.customBind = function (...args) {
 };
 let customBind = getFullName.customBind(emp2, 'vizag', 'AP');
 console.log(customBind());
+// #endregion call, apply & bind
+
+// #region Map
+//-------------- MAP -------------//
+const mapInput = [1, 2, 3, 4];
+
+const square = (n) => n * n;
+const cube = function (n) {
+  return n * n * n;
+};
+
+// // Map usage
+// console.log(mapInput.map(square));
+// console.log(mapInput.map(cube));
+
+//------------------ Custom  MAP ------------------//
+Array.prototype.customMap = function (fn) {
+  if (!Array.isArray(this)) {
+    return new TypeError(`${this} is not an array`);
+  }
+  const context = this;
+
+  const returnValue = [];
+  for (let i = 0; i < context.length; i++) {
+    returnValue.push(fn.call(null, context[i]));
+  }
+  return returnValue;
+};
+// Custom Map usage
+console.log(mapInput.customMap(square));
+console.log(mapInput.customMap(cube));
+// #endregion Map
+
+// #region Reduce
+//----------- Reduce -----------//
+const reduceInput = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const sum = function (acc, val) {
+  return (acc = acc + val);
+};
+const max = function (acc, val) {
+  if (acc < val) {
+    acc = val;
+  }
+  return acc;
+};
+const min = function (acc, val) {
+  if (acc > val) {
+    acc = val;
+  }
+  return acc;
+};
+// Reduce usage
+console.log(reduceInput.reduce(sum, 0));
+console.log(reduceInput.reduce(max, 0));
+console.log(reduceInput.reduce(min, Infinity));
+
+//------------------ Custom Reduce ------------------//
+Array.prototype.customReduce = function (fn, arg) {
+  if (!Array.isArray(this)) {
+    return new TypeError(`${this} is not an array`);
+  }
+
+  if (arg === undefined) {
+    return new Error(`${arg} must be provided`);
+  }
+
+  const context = this;
+  let accumulator = arg;
+
+  for (let i = 0; i < context.length; i++) {
+    accumulator = fn.call(null, context[i], accumulator);
+  }
+
+  return accumulator;
+};
+console.log(reduceInput.customReduce(sum, 0));
+console.log(reduceInput.customReduce(max, 0));
+console.log(reduceInput.customReduce(min, Infinity));
+
+// #endregion Reduce
