@@ -1,6 +1,7 @@
 // Import stylesheets
 import './style.css';
-import './console.js';
+import './Algo.js';
+import './methodBindings.js';
 
 // Write Javascript code!
 const appDiv = document.getElementById('app');
