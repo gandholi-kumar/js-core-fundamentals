@@ -14,28 +14,51 @@ const getFullName = function (empId, emailID) {
 };
 
 // Call - accepts individual parameters
-console.log(getFullName.call(emp1, '12323', 'sai@gmail.com'));
+console.log(getFullName.call(emp1, '1', '1@gmail.com'));
 
 // Apply - accepts list of parameters
-console.log(getFullName.apply(emp2, ['12323', 'sai@gmail.com']));
+console.log(getFullName.apply(emp2, ['2', '2@gmail.com']));
 
 // Bind - accepts params and return a callback function
-const callGetFullName = getFullName.bind(emp1, '12323', 'sai@gmail.com');
+const callGetFullName = getFullName.bind(emp1, '3', '3@gmail.com');
 console.log(callGetFullName());
 
-// Custom Bind method
-Function.prototype.callGetFullName1 = function (...args) {
+// Custom Call
+Function.prototype.customCall = function (obj = {}, ...args) {
+  if (typeof this !== 'function') {
+    throw new Error(`${this} is not callable`);
+  }
+
+  obj.call = this;
+  return obj.call(...args);
+};
+console.log(getFullName.customCall(emp2, 'Bangalore', 'Karnataka'));
+
+// Custom Apply
+Function.prototype.customApply = function (obj = {}, args = []) {
+  if (typeof this !== 'function') {
+    throw new Error(`${this} is not callable`);
+  }
+
+  if (!Array.isArray(args)) {
+    throw new TypeError('args must be an Array');
+  }
+
+  obj.apply = this;
+  return obj.apply(...args);
+};
+console.log(
+  getFullName.customApply(emp2, ['Himalayaasdfn', 'Himachal pradesh'])
+);
+
+// Custom Bind
+Function.prototype.customBind = function (...args) {
   let obj = this;
   const params = args.slice(1);
 
   return function (...parameters) {
-    return obj.apply(args[0], [...params, ...parameters]);
+    return obj.customApply(args[0], [...params, ...parameters]);
   };
 };
-
-let callGetFullName1 = getFullName.callGetFullName1(
-  emp2,
-  '2839234',
-  'kiran@gmail.com'
-);
-console.log(callGetFullName1());
+let customBind = getFullName.customBind(emp2, 'vizag', 'AP');
+console.log(customBind());
