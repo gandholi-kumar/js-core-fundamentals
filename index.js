@@ -2,6 +2,7 @@
 import './style.css';
 import './Algo.js';
 import './methodBindings.js';
+import './bounceThrottle.js';
 
 // Write Javascript code!
 const appDiv = document.getElementById('app');
