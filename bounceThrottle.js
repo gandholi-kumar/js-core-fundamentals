@@ -21,38 +21,44 @@ const customDebounce = function (fn, lmt) {
   };
 };
 const executeDebounce = customDebounce(btnClick, 300);
-document.querySelector("#searchbar2").addEventListener("keyup", (e) => {
-  executeDebounce(counter++, "param1", "param2");
+document.querySelector('#searchbar2').addEventListener('keyup', (e) => {
+  executeDebounce(counter++, 'param1', 'param2');
 });
 
 // #endregion
 
 // #region Throttling Rifle need to work
 
+const rifleRecoils = {
+  AWM: 2000,
+  M416: 1000,
+};
+
+console.log(rifleRecoils['AWM']);
+
 const AWM = function () {
-  console.log("this is awm");
+  console.log('this is awm');
   return 2000;
 };
 
 const M416 = function () {
-  console.log("this is M416");
+  console.log('this is M416');
   return 100;
 };
 
 const killEnemy = function () {
-  console.log("Killed the enemy");
+  console.log('Killed the enemy');
 };
 
-const customThrottling = function (fn, delay) {
+const customThrottling = function (fn) {
   let shoot = true;
-  return function () {
+  return function (...args) {
     const context = this,
-      params = arguments;
+      params = args.slice(1);
 
-    console.log("arguments: ", arguments);
+    console.log('arguments: ', arguments);
     if (shoot) {
       fn.apply(context, params);
-      document.getElementById;
       shoot = false;
       setTimeout(() => {
         shoot = true;
@@ -61,27 +67,14 @@ const customThrottling = function (fn, delay) {
   };
 };
 
-document.querySelector("#rifle").addEventListener("click", (e) => {
-  const typeOfRifle = e.target.value;
-  let delay = 0;
-  if (typeOfRifle === "M416") {
-    delay = M416();
-  } else if (typeOfRifle === "AWM") {
-    delay = AWM();
-  }
-  console.log("delay", delay);
-  const executeThrottling = customThrottling(killEnemy, delay);
+const executeEnemy = customThrottling(killEnemy);
 
-  executeThrottling(typeOfRifle);
+document.querySelector('#rifle').addEventListener('click', (e) => {
+  const typeOfRifle = e.target.value;
+  console.log('Rifle recoils', rifleRecoils[typeOfRifle]);
+  let delay = rifleRecoils[typeOfRifle] ?? 0;
+
+  executeEnemy(delay);
 });
 
 // #endregion
-
-// const multiple = function (a) {
-//   return function (b) {
-//     return a * b;
-//   };
-// };
-
-// const TwoMultiple = multiple(2);
-// console.log(TwoMultiple(3));
