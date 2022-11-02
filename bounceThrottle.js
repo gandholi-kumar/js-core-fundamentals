@@ -38,18 +38,19 @@ const rifleReloadTime = {
   M416: 1000,
 };
 
-const killEnemy = function () {
-  console.log('Killed the enemy');
+const killEnemy = function (rifle) {
+  console.log(`Killed the enemy with ${rifle}`);
 };
 
 let shoot = true;
 const customThrottling = function (fn) {
   return function (...args) {
     const context = this,
+      params = args.slice(1),
       delay = args[0];
 
     if (shoot) {
-      fn.apply(context);
+      fn.apply(context, params);
       shoot = false;
       setTimeout(() => {
         shoot = true;
@@ -64,7 +65,7 @@ document.querySelector('#rifle').addEventListener('click', (e) => {
   const typeOfRifle = e.target.value;
   let delay = rifleReloadTime[typeOfRifle] ?? 0;
 
-  executeEnemy(delay);
+  executeEnemy(delay, typeOfRifle);
 });
 
 // #endregion
