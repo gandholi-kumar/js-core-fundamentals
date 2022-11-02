@@ -42,8 +42,8 @@ const killEnemy = function (rifle) {
   console.log(`Killed the enemy with ${rifle}`);
 };
 
-let shoot = true;
 const customThrottling = function (fn) {
+  let shoot = true;
   return function (...args) {
     const context = this,
       params = args.slice(1),
