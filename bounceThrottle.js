@@ -27,38 +27,29 @@ document.querySelector('#searchbar2').addEventListener('keyup', (e) => {
 
 // #endregion
 
-// #region Throttling Rifle need to work
+// #region Throttling Rifle
 
-const rifleRecoils = {
+// Scenario: We can kill an enemy based on rifle reloading time
+// Player had to wait till the reloading is completed
+// Ignore the triggers within the reload time.
+
+const rifleReloadTime = {
   AWM: 2000,
   M416: 1000,
-};
-
-console.log(rifleRecoils['AWM']);
-
-const AWM = function () {
-  console.log('this is awm');
-  return 2000;
-};
-
-const M416 = function () {
-  console.log('this is M416');
-  return 100;
 };
 
 const killEnemy = function () {
   console.log('Killed the enemy');
 };
 
+let shoot = true;
 const customThrottling = function (fn) {
-  let shoot = true;
   return function (...args) {
     const context = this,
-      params = args.slice(1);
+      delay = args[0];
 
-    console.log('arguments: ', arguments);
     if (shoot) {
-      fn.apply(context, params);
+      fn.apply(context);
       shoot = false;
       setTimeout(() => {
         shoot = true;
@@ -71,8 +62,7 @@ const executeEnemy = customThrottling(killEnemy);
 
 document.querySelector('#rifle').addEventListener('click', (e) => {
   const typeOfRifle = e.target.value;
-  console.log('Rifle recoils', rifleRecoils[typeOfRifle]);
-  let delay = rifleRecoils[typeOfRifle] ?? 0;
+  let delay = rifleReloadTime[typeOfRifle] ?? 0;
 
   executeEnemy(delay);
 });
