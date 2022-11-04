@@ -29,11 +29,16 @@ Function.prototype.customCall = function (obj = {}, ...args) {
   if (typeof this !== 'function') {
     throw new Error(`${this} is not callable`);
   }
-
-  obj.call = this;
-  return obj.call(...args);
+  obj = obj === null || obj === undefined ? window : obj;
+  obj = Object(obj);
+  let symbol = Symbol();
+  obj[symbol] = this;
+  const objCall = obj[symbol](...args);
+  delete obj[symbol];
+  return objCall;
 };
 console.log(getFullName.customCall(emp2, 'Bangalore', 'Karnataka'));
+console.log(getFullName.customCall(emp2, 'Bangalore1', 'Karnataka1'));
 
 // Custom Apply
 Function.prototype.customApply = function (obj = {}, args = []) {
