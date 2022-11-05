@@ -10,18 +10,19 @@ const btnClick = function (...args) {
 
 const customDebounce = function (fn, lmt) {
   let timer;
-  return function () {
+  return function (...args) {
     const context = this;
-    const args = arguments;
+    const params = args;
 
     clearTimeout(timer);
     timer = setTimeout(function () {
-      fn.apply(context, args);
+      fn.apply(context, params);
     }, lmt);
   };
 };
 const executeDebounce = customDebounce(btnClick, 300);
-document.querySelector('#searchbar2').addEventListener('keyup', (e) => {
+
+document.querySelector('#searchbar2').addEventListener('keydown', (e) => {
   executeDebounce(counter++, 'param1', 'param2');
 });
 
